@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Чат Vue.js</title>
+<meta charset="utf-8" />
+</head>
+<body>
+<script src="https://unpkg.com/vue"></script>
+<div id="app">
+  <div class="header">
+    <span class="msg-title">Повідомлення</span><span class="toggle-btn" v-on:click="collapseContainer">-</span>
+  </div>
+  <ul class="msg-list">
+    <li v-for="message in messages" class="msg-li">
+      <img v-bind:src="message.img" class="msg-img"> <span class="msg-text">{{': ' + message.msg}}</span>
+    </li>
+  </ul>
+  
+  <div class="input-container">
+    <input v-model="message" placeholder="Напишіть повідомлення..." v-on:keyup.enter="sendMsg" autoFocus>
+  </div>
+</div>
+
+<style>
+
+body {
+    margin: 0;
+	padding: 0;
+	line-height: 1.5em;
+	color: #000000;
+	background: #00FF00;
+    font: 15px main-font;
+}
+#app {
+  width: 350px;
+  height: 426px;
+  background: #87CEFA;
+  border: 2px solid #FF4500;
+	position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.header {
+  background: #FA8072;
+  color: white;
+  padding: 4px;
+  font: 20px logo-font;
+}
+.toggle-btn {
+  float: right;
+  margin-right: 3px;
+  cursor: pointer;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: scroll;
+  height: 374px;
+    li {
+    padding: 3px;
+  }
+    li:nth-child(even) {
+    background: #E9967A;
+  }
+}
+.msg-img {
+  margin: 0px -2px -5px 0px;
+  padding: 0px 0px 2px 0px;
+  height: 25px;
+  width: 25px;
+}
+.input-container {
+    input {
+    font: 15px main-font;
+    width: 294px;
+    padding: 3px;
+    border-style: solid;
+    border-width: 2px 0px 2px 0px;
+    border-color: #00FF7F;  
+     focus {
+      border-style: solid;
+      border-width: 2px 0px 2px 0px;
+      border-color: #CD5C5C;
+      outline: none; 
+    }
+  }
+}
+</style>
+
+<script>
+var app = new Vue({
+	el: '#app',
+  data: {
+  	message: '',
+  	messages: [
+    	{img: '1.jpg', msg: 'Вітаю!'}
+    ]
+  },
+  methods: {
+  	collapseContainer: function(){
+    	var btn = document.querySelector('.toggle-btn');
+    	if(btn.innerHTML == 'X' || btn.textContent == '-'){
+      	document.querySelector('.msg-list').style.display = 'none';
+        document.querySelector('.input-container').style.display = 'none';
+        document.querySelector('#app').style.height = '50px';
+        btn.innerHTML = '+';
+      }else{
+      	document.querySelector('.msg-list').style.display = 'block';
+        document.querySelector('.input-container').style.display = 'block';
+        document.querySelector('#app').style.height = '426px';
+        btn.innerHTML = '-';
+      }
+    },
+  	delayScrollList: function(time){
+    	setTimeout(function(){
+      	var msgList = document.querySelector('.msg-list');
+     	 	var msgLi = document.querySelector('.msg-li');
+      	msgList.scrollTop = msgList.scrollHeight;
+      }, time);
+    },
+  	sendMsg: function(e){
+      if(e.target.value == ''){
+      	return false;
+      }else{
+        this.messages.push({img: '2.jpg', msg: this.message});
+        this.message = '';
+        
+        this.delayScrollList(5);
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
